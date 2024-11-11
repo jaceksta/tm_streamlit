@@ -4,8 +4,9 @@ import io
 from bs4 import BeautifulSoup
 import pandas as pd
 
-def extract_tables_from_url(url):
-    # Set headers to mimic a browser request
+
+def parse_html(url):
+        # Set headers to mimic a browser request
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36'
     }
@@ -18,6 +19,11 @@ def extract_tables_from_url(url):
 
     # Parse the content with BeautifulSoup
     soup = BeautifulSoup(response.content, 'html.parser')
+    
+    return soup
+
+def extract_tables_from_url(soup):
+
 
     # Find all divs with class 'responsive-table'
     divs = soup.find_all('div', class_='responsive-table')
@@ -41,20 +47,7 @@ def extract_tables_from_url(url):
     return tables
 
 
-def extract_leagues_from_url(url):
-    # Set headers to mimic a browser request
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36'
-    }
-    
-    # Send a GET request to fetch the content from the URL with headers
-    response = requests.get(url, headers=headers)
-    
-    # Raise an exception if there's an HTTP error (e.g., 403, 404)
-    response.raise_for_status()
-
-    # Parse the content with BeautifulSoup
-    soup = BeautifulSoup(response.content, 'html.parser')
+def extract_leagues_from_url(soup):
 
     # Find all divs with class 'responsive-table'
     divs = soup.find_all('div', class_='content-box-headline--logo')

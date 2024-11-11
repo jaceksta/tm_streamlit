@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
-from functions import extract_leagues_from_url, extract_tables_from_url, merge_tables_leagues
+from functions import extract_leagues_from_url, extract_tables_from_url, merge_tables_leagues, parse_html
 
 
 url = st.text_input("Enter Transfermarkt URL", "https://www.transfermarkt.pl/igor-sapala/profil/spieler/380597")
@@ -16,8 +16,9 @@ updated_url = re.sub(r"(://www\.transfermarkt)\.[a-z.]+", r"\1.com", url)
 updated_url = updated_url.replace("profil", "leistungsdatendetails")
 updated_url = updated_url + suffix_url
 
+soup = parse_html(updated_url)
 
-leagues = extract_leagues_from_url(updated_url)
+leagues = extract_leagues_from_url(soup)
 
 leagues_dict = [{"name": league, "number": index} for index, league in enumerate(leagues)]
 
@@ -34,7 +35,7 @@ league["number"] for league in leagues_dict if league["name"] in selected_league
 
 
 
-tables = extract_tables_from_url(updated_url)   
+tables = extract_tables_from_url(soup)   
 
 # Assuming `df` is the DataFrame you've obtained
 
