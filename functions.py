@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import io
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -30,8 +31,11 @@ def extract_tables_from_url(url):
         table_elements = div.find_all('table')
         
         for table in table_elements:
+            table_html = str(table)
+            table_io = io.StringIO(table_html)
+
             # Use pandas to read HTML table into a dataframe
-            table_df = pd.read_html(str(table))[0]  # [0] to get the first (and only) table in the list
+            table_df = pd.read_html(table_io, header=0)[0]  # [0] to get the first (and only) table in the list
             tables.append(table_df)
 
     return tables
