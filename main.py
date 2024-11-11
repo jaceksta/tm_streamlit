@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+from io import StringIO
 from functions import extract_leagues_from_url, extract_tables_from_url, merge_tables_leagues
 
 def get_player_stats(url):
@@ -19,11 +20,11 @@ def get_player_stats(url):
 
     try:
         tables = extract_tables_from_url(updated_url)
-        all_data = pd.DataFrame(columns=['Date', 'Stage', 'Opponent_Name', 'Minutes_Played', 'Comp'])
-
-        for i in selected_league_numbers:
-            all_data = pd.concat([all_data, merge_tables_leagues(tables, leagues, i)])
-
+        
+        # Wrap the tables in a StringIO object
+        tables_io = StringIO(str(tables))
+        all_data = pd.read_html(tables_io, header=0)[0]
+        
         all_data['Date'] = pd.to_datetime(all_data['Date'])
         all_data = all_data.sort_values(by='Date')
 
