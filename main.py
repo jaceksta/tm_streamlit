@@ -45,6 +45,8 @@ try:
 
     all_data['Date'] = pd.to_datetime(all_data['Date'])
     all_data = all_data.sort_values(by='Date')
+    df = pd.DataFrame(all_data)
+
 
     # Display the cleaned DataFrame
 except requests.exceptions.HTTPError as e:
@@ -53,7 +55,6 @@ except Exception as e:
     print(f"An error occurred: {e}")
     
     
-df = pd.DataFrame(all_data)
 
 
 
