@@ -147,5 +147,7 @@ for season in range(2018, 2025):
 # Convert to DataFrame
 seasons_df = pd.DataFrame(seasons_data)
 
+seasons_df = seasons_df[seasons_df['Total Minutes Played'].isna() == False]
+
 # Display the results
 st.table(seasons_df)
